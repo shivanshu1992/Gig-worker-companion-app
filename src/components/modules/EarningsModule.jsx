@@ -374,7 +374,7 @@ export default function EarningsModule({
           <div className="bg-[#111827] border border-slate-700 w-full max-w-lg rounded-3xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto no-scrollbar">
             
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="text-base font-black text-white">Log Today's Shift</h3>
+              <h3 className="text-base font-black text-white">Log Today&apos;s Shift</h3>
               <button
                 onClick={() => setShowLogModal(false)}
                 className="p-2 text-slate-400 hover:text-white rounded-xl bg-slate-800"

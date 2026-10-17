@@ -231,7 +231,7 @@ export default function RightsPage() {
           {filteredSchemes.length === 0 ? (
             <Card className="text-center py-12">
               <AlertCircle className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-              <p className="text-slate-600 font-semibold text-sm">No schemes found matching "{searchQuery}"</p>
+              <p className="text-slate-600 font-semibold text-sm">No schemes found matching &ldquo;{searchQuery}&rdquo;</p>
               <Button
                 variant="outline"
                 size="sm"

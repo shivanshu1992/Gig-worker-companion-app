@@ -78,8 +78,9 @@ function GrievancesContent() {
     }
 
     // Prefill explanation if query param passed
-    if (searchParams.get('tripId') && !userExplanation) {
-      setUserExplanation(`Unfair penalty deduction for trip ${searchParams.get('tripId')}. Order was delivered on time and securely.`);
+    const tripParam = searchParams.get('tripId');
+    if (tripParam) {
+      setUserExplanation((prev) => prev || `Unfair penalty deduction for trip ${tripParam}. Order was delivered on time and securely.`);
     }
   }, [searchParams]);
 
@@ -503,7 +504,7 @@ City: ${profile?.district || 'Mumbai'}, ${profile?.state || 'Maharashtra'}`;
                   <AlertOctagon className="w-12 h-12 text-slate-300 mx-auto" />
                   <div className="text-slate-600 font-semibold text-sm">No appeal drafted yet</div>
                   <p className="text-slate-400 text-xs max-w-sm mx-auto">
-                    Select your platform and issue category, then click "Draft Formal Grievance with AI".
+                    Select your platform and issue category, then click &quot;Draft Formal Grievance with AI&quot;.
                   </p>
                 </div>
               )}

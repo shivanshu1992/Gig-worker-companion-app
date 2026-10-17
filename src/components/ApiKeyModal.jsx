@@ -3,11 +3,11 @@ import { X, Key, Sparkles, CheckCircle2, AlertCircle, ShieldAlert } from 'lucide
 import { storageService } from '../services/storageService';
 
 export default function ApiKeyModal({ isOpen, onClose, currentKey, onSaveKey }) {
-  if (!isOpen) return null;
-
   const [inputKey, setInputKey] = useState(currentKey || '');
   const [testStatus, setTestStatus] = useState(null); // null, 'testing', 'success', 'error'
   const [testMessage, setTestMessage] = useState('');
+
+  if (!isOpen) return null;
 
   const handleTestConnection = async () => {
     if (!inputKey.trim()) {
@@ -109,7 +109,7 @@ export default function ApiKeyModal({ isOpen, onClose, currentKey, onSaveKey }) 
               className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-emerald-400"
             />
             <p className="text-[11px] text-slate-500 mt-1">
-              Key is stored locally in your browser's <code className="text-slate-400">localStorage</code>.
+              Key is stored locally in your browser&apos;s <code className="text-slate-400">localStorage</code>.
             </p>
           </div>
 

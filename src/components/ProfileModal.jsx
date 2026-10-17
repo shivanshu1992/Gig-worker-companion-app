@@ -2,10 +2,16 @@ import React, { useState } from 'react';
 import { X, User, Phone, MapPin, Bike, Target, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 export default function ProfileModal({ isOpen, onClose, profile, onSaveProfile }) {
-  if (!isOpen) return null;
-
   const [formData, setFormData] = useState({ ...profile });
   const [savedSuccess, setSavedSuccess] = useState(false);
+
+  React.useEffect(() => {
+    if (profile) {
+      setFormData({ ...profile });
+    }
+  }, [profile]);
+
+  if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();

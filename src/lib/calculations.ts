@@ -1,35 +1,62 @@
 // Financial and Performance Calculation Rules for Gig Worker Companion
 
-import { EarningRecord, ExpenseItem } from '@/types';
+import { EarningRecord } from '@/types';
+
+/**
+ * Safely parses any value into a finite number.
+ * Returns 0 if null, undefined, NaN, Infinity, or unparseable.
+ */
+export function safeNumber(val: any): number {
+  if (val === null || val === undefined) return 0;
+  if (typeof val === 'number') {
+    return isFinite(val) && !isNaN(val) ? val : 0;
+  }
+  const str = String(val).trim();
+  if (str === '') return 0;
+  const parsed = parseFloat(str);
+  return isFinite(parsed) && !isNaN(parsed) ? parsed : 0;
+}
 
 /**
  * Net Earnings Formula:
- * Net = Gross Earnings + Bonuses + Tips - Recorded Deductions - Recorded Work Expenses
+ * Net Take-Home = Gross Earnings - Fuel/EV Cost - Platform Fee + Tips
+ * Or: Net = Gross + Bonuses + Tips - Deductions - Expenses
  */
 export function calculateNetEarnings(record: {
   grossEarnings: number;
+  fuelCost?: number;
+  platformFee?: number;
   bonuses?: number;
+  incentives?: number;
   tips?: number;
   deductions?: number;
   expenses?: number;
 }): number {
-  const gross = Number(record.grossEarnings) || 0;
-  const bonuses = Number(record.bonuses) || 0;
-  const tips = Number(record.tips) || 0;
-  const deductions = Number(record.deductions) || 0;
-  const expenses = Number(record.expenses) || 0;
+  if (!record) return 0;
 
-  const total = gross + bonuses + tips - deductions - expenses;
+  const gross = safeNumber(record.grossEarnings);
+  const fuel = safeNumber(record.fuelCost);
+  const platformFee = safeNumber(record.platformFee);
+  const bonuses = safeNumber(record.bonuses ?? record.incentives);
+  const tips = safeNumber(record.tips);
+  const deductions = safeNumber(record.deductions);
+  const expenses = safeNumber(record.expenses);
+
+  // If fuelCost or platformFee are explicitly provided, include them in outgoings
+  const totalOutgoings = fuel + platformFee + deductions + expenses;
+  const total = gross + bonuses + tips - totalOutgoings;
   return Math.round(total * 100) / 100;
 }
 
 /**
- * Calculate Net Hourly Rate
+ * Calculate Net Hourly Rate:
+ * Hourly Net = Net Take-Home / Hours
  */
 export function calculateHourlyRate(netEarnings: number, hoursWorked: number): number {
-  const hours = Number(hoursWorked) || 0;
+  const net = safeNumber(netEarnings);
+  const hours = safeNumber(hoursWorked);
   if (hours <= 0) return 0;
-  const rate = netEarnings / hours;
+  const rate = net / hours;
   return Math.round(rate * 100) / 100;
 }
 
@@ -41,8 +68,8 @@ export function calculateGoalProgress(actualEarnings: number, goal: number): {
   remaining: number;
   isAchieved: boolean;
 } {
-  const target = Number(goal) || 1;
-  const actual = Math.max(0, Number(actualEarnings) || 0);
+  const target = safeNumber(goal);
+  const actual = Math.max(0, safeNumber(actualEarnings));
 
   if (target <= 0) {
     return { percentage: 100, remaining: 0, isAchieved: true };
@@ -55,6 +82,7 @@ export function calculateGoalProgress(actualEarnings: number, goal: number): {
 
   return { percentage, remaining, isAchieved };
 }
+
 
 /**
  * Aggregate earnings records for a given set
@@ -70,6 +98,20 @@ export function aggregateEarnings(records: EarningRecord[]): {
   avgHourlyRate: number;
   tripCount: number;
 } {
+  if (!Array.isArray(records)) {
+    return {
+      totalGross: 0,
+      totalBonuses: 0,
+      totalTips: 0,
+      totalDeductions: 0,
+      totalExpenses: 0,
+      totalNet: 0,
+      totalHours: 0,
+      avgHourlyRate: 0,
+      tripCount: 0,
+    };
+  }
+
   let totalGross = 0;
   let totalBonuses = 0;
   let totalTips = 0;
@@ -79,13 +121,14 @@ export function aggregateEarnings(records: EarningRecord[]): {
   let totalHours = 0;
 
   for (const r of records) {
-    totalGross += Number(r.grossEarnings) || 0;
-    totalBonuses += Number(r.bonuses) || 0;
-    totalTips += Number(r.tips) || 0;
-    totalDeductions += Number(r.deductions) || 0;
-    totalExpenses += Number(r.expenses) || 0;
-    totalNet += Number(r.netEarnings) || calculateNetEarnings(r);
-    totalHours += Number(r.hoursWorked) || 0;
+    if (!r) continue;
+    totalGross += safeNumber(r.grossEarnings);
+    totalBonuses += safeNumber(r.bonuses);
+    totalTips += safeNumber(r.tips);
+    totalDeductions += safeNumber(r.deductions);
+    totalExpenses += safeNumber(r.expenses);
+    totalNet += r.netEarnings !== undefined ? safeNumber(r.netEarnings) : calculateNetEarnings(r);
+    totalHours += safeNumber(r.hoursWorked);
   }
 
   const avgHourlyRate = totalHours > 0 ? Math.round((totalNet / totalHours) * 100) / 100 : 0;
@@ -111,16 +154,20 @@ export function filterRecordsByPeriod(
   period: 'today' | 'week' | 'month' | 'all',
   referenceDateStr?: string
 ): EarningRecord[] {
+  if (!Array.isArray(records)) return [];
+
   const refDate = referenceDateStr ? new Date(referenceDateStr) : new Date();
   const refDateFormatted = refDate.toISOString().split('T')[0];
 
   return records.filter((r) => {
+    if (!r || !r.date) return false;
     if (period === 'all') return true;
     if (period === 'today') {
       return r.date === refDateFormatted;
     }
 
     const recordDate = new Date(r.date);
+    if (isNaN(recordDate.getTime())) return false;
     const diffTime = refDate.getTime() - recordDate.getTime();
     const diffDays = diffTime / (1000 * 3600 * 24);
 
@@ -133,3 +180,4 @@ export function filterRecordsByPeriod(
     return true;
   });
 }
+

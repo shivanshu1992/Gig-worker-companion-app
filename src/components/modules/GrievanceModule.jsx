@@ -74,9 +74,11 @@ export default function GrievanceModule({
       }));
       setPrefilledAlert(true);
       setTimeout(() => setPrefilledAlert(false), 5000);
-      onClearPrefilled();
+      if (onClearPrefilled) {
+        onClearPrefilled();
+      }
     }
-  }, [prefilledData]);
+  }, [prefilledData, onClearPrefilled]);
 
   // Voice dictation handler
   const handleToggleVoiceInput = () => {

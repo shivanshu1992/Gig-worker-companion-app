@@ -119,16 +119,37 @@ export default function AssistantPage() {
     }
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      const recognition = new SpeechRecognition();
+      const win = window as unknown as {
+        SpeechRecognition?: new () => {
+          continuous: boolean;
+          interimResults: boolean;
+          lang: string;
+          onstart: () => void;
+          onresult: (e: { results: { [key: number]: { [key: number]: { transcript: string } } } }) => void;
+          onerror: () => void;
+          onend: () => void;
+          start: () => void;
+        };
+        webkitSpeechRecognition?: new () => {
+          continuous: boolean;
+          interimResults: boolean;
+          lang: string;
+          onstart: () => void;
+          onresult: (e: { results: { [key: number]: { [key: number]: { transcript: string } } } }) => void;
+          onerror: () => void;
+          onend: () => void;
+          start: () => void;
+        };
+      };
+      const SpeechClass = win.SpeechRecognition || win.webkitSpeechRecognition;
+      if (!SpeechClass) return;
+      const recognition = new SpeechClass();
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.lang = lang === 'hi' ? 'hi-IN' : lang === 'pa' ? 'pa-IN' : 'en-IN';
 
       recognition.onstart = () => setIsRecording(true);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      recognition.onresult = (event: any) => {
+      recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
         setInput((prev) => (prev ? `${prev} ${transcript}` : transcript));
         setIsRecording(false);

@@ -445,9 +445,16 @@ export async function generateGrievanceAppealDraft(params: {
   incidentDate?: string;
   referenceIds?: string;
   tone: 'formal_assertive' | 'polite_cooperative' | 'urgent_legal';
-  language: SupportedLanguage;
-  userExplanation: string;
-}): Promise<{ subject: string; recipient: string; content: string }> {
+  language?: string;
+  userExplanation?: string;
+}): Promise<{
+  subject: string;
+  subjectLine: string;
+  recipient: string;
+  content: string;
+  draftContent: string;
+  escalationContacts: Array<{ name: string; contact: string }>;
+}> {
   const { category, platformOrEmployer, disputedAmount = 0, incidentDate = 'Recent', referenceIds = 'N/A', tone, language, userExplanation } = params;
 
   const subject = language === 'hi'
@@ -568,7 +575,18 @@ Partner ID: [Your Partner ID]
 Contact Number: [Your Phone Number]`;
   }
 
-  return { subject, recipient, content: body };
+  return {
+    subject,
+    subjectLine: subject,
+    recipient,
+    content: body,
+    draftContent: body,
+    escalationContacts: [
+      { name: 'National Consumer Helpline', contact: '1915' },
+      { name: 'e-Shram National Helpdesk', contact: '14434' },
+      { name: 'Regional Labour Commissioner', contact: '1800-180-1111' },
+    ],
+  };
 }
 
 /**

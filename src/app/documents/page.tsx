@@ -432,7 +432,7 @@ ${workerName}
                           No notice analyzed yet
                         </div>
                         <p className="text-slate-400 text-xs max-w-sm mx-auto">
-                          Click "Simplify with AI" to generate a transparent summary and legal guidance.
+                          Click &quot;Simplify with AI&quot; to generate a transparent summary and legal guidance.
                         </p>
                       </div>
                     )}
@@ -607,7 +607,7 @@ ${workerName}
                       <FileCheck className="w-12 h-12 text-slate-300 mx-auto" />
                       <div className="text-slate-600 font-semibold text-sm">No document generated yet</div>
                       <p className="text-slate-400 text-xs max-w-sm mx-auto">
-                        Fill in the parameters on the left and click "Generate Document Draft" to create your formal statement.
+                        Fill in the parameters on the left and click &quot;Generate Document Draft&quot; to create your formal statement.
                       </p>
                     </div>
                   )}
