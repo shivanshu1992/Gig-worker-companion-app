@@ -1,0 +1,41 @@
+{
+  "name": "gigsaathi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI-Powered Digital Assistant for Gig and Informal Workers in India",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.9.0",
+    "@supabase/ssr": "^0.5.1",
+    "@supabase/supabase-js": "^2.45.6",
+    "class-variance-authority": "^0.7.0",
+    "client-only": "^0.0.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.453.0",
+    "next": "^14.2.15",
+    "openai": "^4.68.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.53.1",
+    "recharts": "^2.13.0",
+    "styled-jsx": "^5.1.1",
+    "tailwind-merge": "^2.5.4",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.3"
+  }
+}

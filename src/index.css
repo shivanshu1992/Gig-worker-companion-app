@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    @apply antialiased select-none;
+    font-family: 'Inter', 'Noto Sans Devanagari', system-ui, sans-serif;
+  }
+}
+
+/* Sunlight mode: Ultra high contrast for bright outdoor sun */
+.sunlight-mode {
+  --bg-primary: #FFFDF0;
+  --bg-card: #FFFFFF;
+  --text-primary: #000000;
+  --text-secondary: #1F2937;
+  --border-contrast: #000000;
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.sunlight-mode .card-sunlight {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 4px 4px 0px 0px #000000 !important;
+}
+
+.sunlight-mode .text-sunlight-dark {
+  color: #000000 !important;
+}
+
+.sunlight-mode .text-sunlight-muted {
+  color: #27272a !important;
+  font-weight: 600 !important;
+}
+
+/* Audio wave pulse animation */
+@keyframes soundwave {
+  0%, 100% { height: 6px; }
+  50% { height: 18px; }
+}
+
+.animate-wave-1 {
+  animation: soundwave 0.8s ease-in-out infinite;
+}
+.animate-wave-2 {
+  animation: soundwave 0.8s ease-in-out infinite 0.2s;
+}
+.animate-wave-3 {
+  animation: soundwave 0.8s ease-in-out infinite 0.4s;
+}
+
+/* Hide scrollbar for clean horizontal card carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f8faf8;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #0d9488;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #1e293b;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f0fdf4;
+  --accent-foreground: #15803d;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #0d9488;
+  --radius: 0.75rem;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-feature-settings: "rlig" 1, "calt" 1;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 100vh;
+}
+
+/* Accessible tap targets for mobile gig workers on road */
+button, a, input, select, textarea {
+  touch-action: manipulation;
+}
+
+/* Custom scrollbar for desktop sidebar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* High contrast sun-readable style */
+.sun-readable {
+  filter: contrast(1.15) brightness(1.02);
+}
+
+/* Sunlight mode: Ultra high contrast for bright outdoor sun */
+.sunlight-mode {
+  --bg-primary: #FFFDF0;
+  --bg-card: #FFFFFF;
+  --text-primary: #000000;
+  --text-secondary: #1F2937;
+  --border-contrast: #000000;
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.sunlight-mode .card-sunlight {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 4px 4px 0px 0px #000000 !important;
+}
+
+.sunlight-mode .text-sunlight-dark {
+  color: #000000 !important;
+}
+
+.sunlight-mode .text-sunlight-muted {
+  color: #27272a !important;
+  font-weight: 600 !important;
+}
+
+/* Audio wave pulse animation */
+@keyframes soundwave {
+  0%, 100% { height: 6px; }
+  50% { height: 18px; }
+}
+
+.animate-wave-1 {
+  animation: soundwave 0.8s ease-in-out infinite;
+}
+.animate-wave-2 {
+  animation: soundwave 0.8s ease-in-out infinite 0.2s;
+}
+.animate-wave-3 {
+  animation: soundwave 0.8s ease-in-out infinite 0.4s;
+}
+
+/* Hide scrollbar for clean horizontal card carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Print styles for generating clean documents & grievance appeals */
+@media print {
+  header, nav, .no-print, button:not(.print-show) {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .print-page {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
